@@ -1,0 +1,14 @@
+{application, bddr,
+ [
+  {description, "Minimalist BDD for Erlang, sans cucumbers"},
+  {vsn, "0.1"},
+  {modules, [
+             bddr
+            ]},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {env, []}
+ ]}.
