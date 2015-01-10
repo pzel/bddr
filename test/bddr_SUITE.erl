@@ -16,7 +16,9 @@ all() -> [givens_can_be_a_lambda,
 
           then_clause_can_access_action_result,
           then_clause_matches_on_action_result,
-          then_with_unexpected_result_raises_function_clause
+          then_with_unexpected_result_raises_function_clause,
+
+          test_provides_teardown_option
          ].
 
 givens_can_be_a_lambda(_) ->
@@ -80,9 +82,19 @@ then_with_unexpected_result_raises_function_clause(_) ->
                         fun(_) -> nay end,
                         fun(yay) -> this_will_fail end)).
 
+test_provides_teardown_option(_) ->
+    bddr:test(spawn(fun echo/0),
+              fun(_) -> some_user_action end,
+              fun(_) -> ok end,
+
+              fun(Pid) -> Pid ! self(),
+                          receive ok -> ok end,
+                          false = is_process_alive(Pid) end).
+
 
 %% Non-test functions
-
+echo() ->
+    receive From -> From ! ok end.
 
 compiles(Source) ->
     try {ModName, Bin} = dynamic_compile:from_string(Source),

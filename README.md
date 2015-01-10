@@ -28,10 +28,10 @@ bddr:test([given_app_started(),
 
 ## ...it doesn't do XYZ?
 
-No, the implementation is four lines of code. No parse transforms, no
-macros. It's the developer's responsibility to provide his/her abstractions for
-the tested components. Remember, your tests are just Erlang code. Make it
-readable and extensible for others. Be humane.
+No, the implementation is minimal. No parse transforms, no macros. It's the
+developer's responsibility to provide his/her abstractions for the tested
+components. Remember, your tests are just Erlang code. Make it readable and
+extensible for others. Be humane.
 
 ----------
 
