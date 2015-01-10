@@ -15,23 +15,23 @@ Here is a basic test with independent givens:
 
 ```erlang
 
-  bddr:test([given_app_started(),
-             given_user_in_db("user", "password")],
+bddr:test([given_app_started(),
+           given_user_in_db("user", "password")],
 
-           fun([App,{User,Pass}]) ->
-             when_user_logs_in(App, User, Pass) end,
+          fun([App,{User,Pass}]) ->
+            when_user_logs_in(App, User, Pass) end,
 
-           fun(Screen) ->
-             "Welcome, User!" = welcome_text(Screen) end).
+          fun(Screen) ->
+            "Welcome, User!" = welcome_text(Screen) end).
 
 ```
 
 ## ...it doesn't do XYZ?
 
-No, the implementation is four lines of code. No parse transforms, no macros.
-It's the developer's responsibility to provide his/her abstractions for the
-tested components. Remember, your tests are just Erlang code. Make it readable
-and extensible for others. Be humane.
+No, the implementation is four lines of code. No parse transforms, no
+macros. It's the developer's responsibility to provide his/her abstractions for
+the tested components. Remember, your tests are just Erlang code. Make it
+readable and extensible for others. Be humane.
 
 ----------
 

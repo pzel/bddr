@@ -41,11 +41,10 @@ when_clause_can_access_givens(_) ->
       fun(_) -> ok end).
 
 when_cannot_access_givens_bindings(_) ->
-    %% This code will not compile, producing the compiler error:
-    %% bddr_SUITE.erl:23: variable 'AGiven' is unbound
-    %% bddr_SUITE.erl:22: Warning: variable 'AGiven' is unused
-
-    %% Below we prove it, using dynamic_compile.
+    %% The BadTest code will not compile, producing a compiler error like:
+    %% your_SUITE.erl:99: variable 'AGiven' is unbound
+    %% your_SUITE.erl:98: Warning: variable 'AGiven' is unused
+    %% We prove it below, using dynamic_compile.
     true = compiles(
         "-module(good_test).\n"
         "-export([good_test/0]).\n"
@@ -55,15 +54,13 @@ when_cannot_access_givens_bindings(_) ->
         "-module(bad_test).\n"
         "-export([bad_test/0]).\n"
         "bad_test() ->\n"
-        "   bddr:test([G = 1],fun(_)-> G end,fun(R)-> 1 = R end).\n").
-
+        "   bddr:test([AGiven = 1],fun(_)-> AGiven end,fun(R)-> 1 = R end).\n").
 
 when_with_unexpected_givens_raises_function_clause(_) ->
     true = ?raises_function_clause(
               bddr:test([1,2,3],
                         fun([wrong,args]) -> nay end,
                         fun(_) -> ok end)).
-
 
 then_clause_can_access_action_result(_) ->
     bddr:test(
@@ -85,6 +82,7 @@ then_with_unexpected_result_raises_function_clause(_) ->
 
 
 %% Non-test functions
+
 
 compiles(Source) ->
     try {ModName, Bin} = dynamic_compile:from_string(Source),
