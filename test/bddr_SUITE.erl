@@ -1,5 +1,6 @@
 -module(bddr_SUITE).
 -compile([export_all]).
+-include_lib("bddr/include/bddr.hrl").
 
 -define(raises_function_clause(Expr),
                try begin Expr, false end
@@ -18,7 +19,9 @@ all() -> [givens_can_be_a_lambda,
           then_clause_matches_on_action_result,
           then_with_unexpected_result_raises_function_clause,
 
-          test_provides_teardown_option
+          test_provides_teardown_option,
+
+          given_when_then_as_macros
          ].
 
 givens_can_be_a_lambda(_) ->
@@ -90,6 +93,13 @@ test_provides_teardown_option(_) ->
               fun(Pid) -> Pid ! self(),
                           receive ok -> ok end,
                           false = is_process_alive(Pid) end).
+
+
+given_when_then_as_macros(_) ->
+    bddr:test(?Given() -> one end,
+              ?When(one) -> two end,
+              ?Then(two) -> ok end,
+              ?Teardown(one) -> ok end).
 
 
 %% Non-test functions

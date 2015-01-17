@@ -1,0 +1,4 @@
+-define(Given, fun).
+-define(When, fun).
+-define(Then, fun).
+-define(Teardown, fun).

@@ -32,13 +32,29 @@ bddr:test([given_app_started(),
 
 ```
 
+If that's to raw for you, add some sugar in the form of macros: 
+
+```erlang
+
+-include_lib("bddr/include/bddr.hrl").
+
+bddr:test(?Given() -> server_running() end,
+          ?When(Server) -> i_query_server(Server, "hello") end,
+          ?Then(Reply) -> {ok, "hello to you too!"} = Reply end,
+           ?Teardown(Server) -> stop_server(Server) end)
+
+```
+
+
+
 ...so it doesn't do XYZ?
 ========================
 
-No, the implementation is intentionally minimal. No parse transforms, no
-macros. It's the developer's responsibility to provide his/her abstractions for
-the tested components. Remember, your tests are just Erlang code. Make it
-readable and extensible for others. Be humane.
+No, the implementation is intentionally minimal. It's the developer's
+responsibility to provide his/her abstractions for the tested
+components. Remember, your tests are just Erlang code. Make it readable and
+extensible for others. Be humane.
+
 
 -------------------------------------------------------------------------------
 
