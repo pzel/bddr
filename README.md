@@ -32,16 +32,23 @@ bddr:test([given_app_started(),
 
 ```
 
-If that's to raw for you, add some sugar in the form of macros: 
+If that seems too raw to you, add some sugar in the form of macros: 
 
 ```erlang
 
 -include_lib("bddr/include/bddr.hrl").
 
-bddr:test(?Given() -> server_running() end,
-          ?When(Server) -> i_query_server(Server, "hello") end,
-          ?Then(Reply) -> {ok, "hello to you too!"} = Reply end,
-           ?Teardown(Server) -> stop_server(Server) end)
+bddr:test(?Given() ->
+            server_running() end,
+
+          ?When(Server) ->
+            i_query_server(Server, "hello") end,
+
+          ?Then(Reply) ->
+            {ok, "hello to you too!"} = Reply end,
+
+          ?Teardown(Server) ->
+             stop_server(Server) end)
 
 ```
 
