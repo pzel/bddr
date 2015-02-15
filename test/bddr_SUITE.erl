@@ -8,20 +8,23 @@
                      E:R -> error({not_function_clause, E, R})
                end).
 
-all() -> [givens_can_be_a_lambda,
-          givens_can_be_a_term,
+all() -> [ givens_can_be_a_lambda,
+           givens_can_be_a_term,
 
-          when_clause_can_access_givens,
-          when_cannot_access_givens_bindings,
-          when_with_unexpected_givens_raises_function_clause,
+           when_clause_can_access_givens,
+           when_cannot_access_givens_bindings,
+           when_with_unexpected_givens_raises_function_clause,
 
-          then_clause_can_access_action_result,
-          then_clause_matches_on_action_result,
-          then_with_unexpected_result_raises_function_clause,
+           then_clause_can_access_action_result,
+           then_clause_matches_on_action_result,
+           then_with_unexpected_result_raises_function_clause,
 
-          test_provides_teardown_option,
+           test_provides_teardown_option,
+           teardown_runs_despite_crash_in_when,
+           teardown_runs_despite_crash_in_then,
+           failed_teardown_is_failed_test,
 
-          given_when_then_as_macros
+           given_when_then_as_macros
          ].
 
 givens_can_be_a_lambda(_) ->
@@ -94,13 +97,37 @@ test_provides_teardown_option(_) ->
                           receive ok -> ok end,
                           false = is_process_alive(Pid) end).
 
+teardown_runs_despite_crash_in_when(_) ->
+    Self = self(),
+    {'EXIT', _} =
+        (catch bddr:test([],
+                         fun(_) -> error(when_error) end,
+                         const(ok),
+                         fun(_) -> Self ! got_to_teardown end)),
+    receive got_to_teardown -> ok
+    after 100 -> error(teardown_failed) end.
+
+teardown_runs_despite_crash_in_then(_) ->
+    Self = self(),
+    {'EXIT', _} =
+        (catch bddr:test([],
+                         const(ok),
+                         fun(_) -> error(then_error) end,
+                         fun(_) -> Self ! got_to_teardown end)),
+    receive got_to_teardown -> ok
+    after 100 -> error(teardown_failed) end.
+
+failed_teardown_is_failed_test(_) ->
+    {'EXIT', {broken_teardown, _}} =
+        (catch bddr:test([], const(ok), const(ok),
+                         fun(_) -> error(broken_teardown) end)),
+    ok.
 
 given_when_then_as_macros(_) ->
     bddr:test(?Given() -> one end,
               ?When(one) -> two end,
               ?Then(two) -> ok end,
               ?Teardown(one) -> ok end).
-
 
 %% Non-test functions
 echo() ->
@@ -111,3 +138,5 @@ compiles(Source) ->
          is_atom(ModName) andalso is_binary(Bin)
     catch throw:_ -> false
     end.
+
+const(Val) -> fun(_) -> Val end.
