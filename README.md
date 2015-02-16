@@ -52,6 +52,19 @@ bddr:test(?Given() ->
 
 ```
 
+### Experimentally: ditch common test/eunit
+
+Using `bddr_suite:run_suite/1`. Your test suite must export a common-test-like
+`all/0` listing of test names.
+
+
+```makefile
+test: compile
+	@erl -shutdown_time 1 -noshell -pa deps/ebin -pa ebin -pa test \
+	-eval 'bddr_suite:run_suite(my_test_SUITE).'
+```
+
+
 
 
 ...so it doesn't do XYZ?
