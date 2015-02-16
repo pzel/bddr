@@ -58,7 +58,7 @@ is_passed({failed, _})-> false.
 print_failures(Failures) ->
     [ print_one(F) || F <- Failures ].
 print_one({failed, {E,Trace}}) ->
-    io:format(user, "failed: ~p ~p~n", [E, prune(Trace)]);
+    io:format(user, "Failed:~n  ~p~n  ~p~n", [E, prune(Trace)]);
 print_one({failed, E}) ->
     io:format(user, "failed: ~p~n", [E]).
 

@@ -1,8 +1,8 @@
 .PHONY: test-clean test-compile test compile
 
 test: test-clean test-compile compile
-	@erl -shutdown_time 10 -noshell -pa ebin -pa test \
-	-eval 'bddr_suite:run_suite(bddr_SUITE).'
+	@erl -shutdown_time 1 -noshell -pa ebin -pa test \
+	-eval 'bddr_suite:run_suite(bddr_test_SUITE).'
 
 compile:
 	@rebar compile

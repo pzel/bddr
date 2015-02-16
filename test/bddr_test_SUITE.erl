@@ -1,4 +1,4 @@
--module(bddr_SUITE).
+-module(bddr_test_SUITE).
 -compile([export_all]).
 -include_lib("bddr/include/bddr.hrl").
 
