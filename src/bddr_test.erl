@@ -23,6 +23,6 @@ run_test(Env, W, T) ->
     end.
 
 return({bddr_failure, {throw, T}}) -> throw(T);
-return({bddr_failure, {error, E}}) -> error({E, erlang:get_stacktrace()});
+return({bddr_failure, {error, E}}) -> error(E); %{E, erlang:get_stacktrace()});
 return({bddr_failure, {exit, E}}) -> exit(E);
 return(Result) -> Result.
