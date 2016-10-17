@@ -4,8 +4,7 @@
 
 -define(raises_function_clause(Expr),
                try begin Expr, false end
-               catch error:{function_clause, _} -> true;
-                     error:function_clause -> true;
+               catch exit:{error, function_clause, _} -> true;
                      E:R -> error({not_function_clause, E, R})
                end).
 

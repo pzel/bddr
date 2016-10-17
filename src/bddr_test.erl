@@ -19,10 +19,8 @@ run_given(G) -> G.
 
 run_test(Env, W, T) ->
     try T(W(Env))
-    catch Error:R -> {bddr_failure, {Error, R}}
+    catch Error:R -> {bddr_failure, {Error, R, erlang:get_stacktrace()}}
     end.
 
-return({bddr_failure, {throw, T}}) -> throw(T);
-return({bddr_failure, {error, E}}) -> error(E); %{E, erlang:get_stacktrace()});
-return({bddr_failure, {exit, E}}) -> exit(E);
+return({bddr_failure, Failure}) -> exit(Failure);
 return(Result) -> Result.
